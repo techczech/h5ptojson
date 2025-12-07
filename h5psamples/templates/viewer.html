@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}{{ package.title }} Preview{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <header class="card-header">
+      <div>
+        <p class="eyebrow">Package title</p>
+        <h2>{{ package.title }}</h2>
+      </div>
+      <div class="metadata-grid">
+        <div>
+          <p class="eyebrow">Language</p>
+          <p>{{ package.metadata.language or package.metadata.defaultLanguage }}</p>
+        </div>
+        <div>
+          <p class="eyebrow">Main library</p>
+          <p>{{ package.metadata.mainLibrary }}</p>
+        </div>
+        <div>
+          <p class="eyebrow">License</p>
+          <p>{{ package.metadata.license }}</p>
+        </div>
+      </div>
+    </header>
+    <p>
+      Browse through each slide below. Click “Details” on any block to inspect the
+      original H5P element definition, or jump between slides using the list on
+      the left.
+    </p>
+  </section>
+
+  <section class="card export-card">
+    <div class="export-grid">
+      <div>
+        <p class="eyebrow">Structure builder</p>
+        <p>
+          Assign sections, optional subsections, and describe the content type for
+          each slide. When ready, download a semantic JSON summary that mirrors the
+          structure you define.
+        </p>
+      </div>
+      <button id="export-semantic" type="button">Download semantic JSON</button>
+    </div>
+  </section>
+
+  <div class="viewer-shell">
+    <aside class="slides-nav">
+      <h3>Slides</h3>
+      <ol>
+        {% for slide in package.slides %}
+          <li>
+            <a href="#slide-{{ slide.index + 1 }}">{{ slide.title }}</a>
+          </li>
+        {% endfor %}
+      </ol>
+    </aside>
+
+    <section class="slides-area">
+      {% for slide in package.slides %}
+        <article id="slide-{{ slide.index + 1 }}" class="slide-card" data-slide-index="{{ slide.index }}">
+          <header>
+            <h3>Slide {{ slide.index + 1 }} — {{ slide.title }}</h3>
+          </header>
+          <div class="semantic-form form-grid">
+            <label>
+              <span>Section</span>
+              <input type="text" data-field="section" placeholder="e.g. Introduction" />
+            </label>
+            <label>
+              <span>Subsection</span>
+              <input type="text" data-field="subsection" placeholder="Optional subsection" />
+            </label>
+            <label>
+              <span>Content type</span>
+              <input type="text" data-field="contentType" placeholder="e.g. Video, Task" />
+            </label>
+          </div>
+          <div class="elements-grid">
+            {% if slide.elements %}
+              {% for element in slide.elements %}
+                <div class="element-card" id="{{ element.id }}">
+                  <div class="element-meta">
+                    <p class="eyebrow">{{ element.library }}</p>
+                    <h4>{{ element.title }}</h4>
+                  </div>
+                  <div class="element-body">
+                    {{ element.display_html }}
+                  </div>
+                  <button class="details-btn" type="button"
+                    data-details='{{ element.raw | tojson }}'>
+                    Details
+                  </button>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="empty">Slide has no visual elements.</p>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  </div>
+
+  <script id="semantic-seed" type="application/json">{{ package.semantic_seed | tojson }}</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Upload H5P Archive{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2>Upload an extracted H5P archive</h2>
+    <p>
+      Export your H5P content as a .zip file (or unzip an .h5p package) and
+      upload it below. The tool will render the Course Presentation slides, text,
+      images, videos, and link out to external resources. Each element also has a
+      “Details” panel showing its original configuration for quick debugging.
+    </p>
+    <form class="upload-form" method="post" enctype="multipart/form-data">
+      <label class="file-field">
+        <span>Select .zip file</span>
+        <input type="file" name="package" accept=".zip,.h5p" required />
+      </label>
+      <button type="submit">Preview package</button>
+    </form>
+  </section>
+{% endblock %}
