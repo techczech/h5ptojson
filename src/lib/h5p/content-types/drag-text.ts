@@ -51,3 +51,5 @@ export function parseDragText(action: H5PAction, _pkg: H5PPackage): SemanticQuiz
 }
 
 
+
+
