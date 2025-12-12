@@ -38,3 +38,5 @@ export function parseTrueFalse(action: H5PAction, _pkg: H5PPackage): SemanticQui
 }
 
 
+
+
